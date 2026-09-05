@@ -18,6 +18,7 @@ import {
   TOOL_OVERLAY_VERTICAL_OFFSET,
 } from '../../constants.js';
 import type { SubagentCharacter } from '../../hooks/useExtensionMessages.js';
+import { isKioskMode } from '../../kioskMode.js';
 import type { OfficeState } from '../engine/officeState.js';
 import { overlayProjection } from '../projection.js';
 import type { ToolActivity } from '../types.js';
@@ -203,7 +204,20 @@ export function ToolOverlay({
 
         // Team info
         const teamRoleLabel = ch.isTeamLead ? 'LEAD' : ch.agentName || null;
-        const hasExtraLines = !!(ch.folderName || teamRoleLabel);
+
+        // Kiosk: an idle office is four panels all reading "Idle" over a name
+        // that has been demoted to small print — the noise is the part you can
+        // read from across the room. While idle, the name takes the main line
+        // and the status line goes away entirely; the moment an agent picks up
+        // a tool it leads with that instead, so "who is busy" still reads at a
+        // glance. Untouched outside kiosk, where hover and click make the
+        // status line worth its space.
+        const nameLabel = ch.folderName;
+        const promoteName = isKioskMode && activityText === 'Idle' && !!nameLabel;
+        const primaryText = promoteName && nameLabel ? nameLabel : activityText;
+        const secondaryText = promoteName ? null : nameLabel;
+
+        const hasExtraLines = !!(secondaryText || teamRoleLabel);
 
         // Context gauge. Every agent gets one — lead, teammate, adopted,
         // headless — as soon as it has taken a turn. Sub-agents never do: they
@@ -252,11 +266,11 @@ export function ToolOverlay({
                     fontStyle: isSub ? 'italic' : undefined,
                   }}
                 >
-                  {activityText}
+                  {primaryText}
                 </span>
-                {ch.folderName && (
+                {secondaryText && (
                   <span className="text-2xs leading-none overflow-hidden text-ellipsis block">
-                    {ch.folderName}
+                    {secondaryText}
                   </span>
                 )}
               </div>
