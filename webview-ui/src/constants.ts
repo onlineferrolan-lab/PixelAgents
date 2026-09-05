@@ -1,14 +1,14 @@
 import type { ColorValue } from './components/ui/types.js';
 
-// ── Grid & Layout ────────────────────────────────────────────
+// â”€â”€ Grid & Layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const TILE_SIZE = 16;
 export const DEFAULT_COLS = 20;
 export const DEFAULT_ROWS = 11;
 export const MAX_COLS = 64;
 export const MAX_ROWS = 64;
 
-// ── Character Animation ─────────────────────────────────────
-export const WALK_SPEED_PX_PER_SEC = 48;
+// â”€â”€ Character Animation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+export const WALK_SPEED_PX_PER_SEC = 32;
 export const WALK_FRAME_DURATION_SEC = 0.15;
 export const TYPE_FRAME_DURATION_SEC = 0.3;
 export const WANDER_PAUSE_MIN_SEC = 2.0;
@@ -18,7 +18,7 @@ export const WANDER_MOVES_BEFORE_REST_MAX = 6;
 export const SEAT_REST_MIN_SEC = 120.0;
 export const SEAT_REST_MAX_SEC = 240.0;
 
-// ── Matrix Effect ────────────────────────────────────────────
+// â”€â”€ Matrix Effect â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const MATRIX_EFFECT_DURATION_SEC = 0.3;
 export const MATRIX_TRAIL_LENGTH = 6;
 export const MATRIX_SPRITE_COLS = 16;
@@ -35,7 +35,7 @@ export const MATRIX_TRAIL_EMPTY_ALPHA = 0.5;
 export const MATRIX_TRAIL_MID_THRESHOLD = 0.33;
 export const MATRIX_TRAIL_DIM_THRESHOLD = 0.66;
 
-// ── Rendering ────────────────────────────────────────────────
+// â”€â”€ Rendering â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const CHARACTER_SITTING_OFFSET_PX = 6;
 export const CHARACTER_Z_SORT_OFFSET = 0.5;
 export const OUTLINE_Z_SORT_OFFSET = 0.001;
@@ -56,7 +56,7 @@ export const BUBBLE_SITTING_OFFSET_PX = 10;
 export const BUBBLE_VERTICAL_OFFSET_PX = 24;
 export const FALLBACK_FLOOR_COLOR = '#808080';
 
-// ── Rendering - Overlay Colors (canvas, not CSS) ─────────────
+// â”€â”€ Rendering - Overlay Colors (canvas, not CSS) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const SEAT_OWN_COLOR = 'rgba(0, 127, 212, 0.35)';
 export const SEAT_AVAILABLE_COLOR = 'rgba(0, 200, 80, 0.35)';
 export const SEAT_BUSY_COLOR = 'rgba(220, 50, 50, 0.35)';
@@ -76,11 +76,11 @@ export const CANVAS_FALLBACK_TILE_COLOR = '#444';
 export const CANVAS_ERROR_TILE_COLOR = '#FF00FF';
 export const WALL_COLOR = '#3A3A5C';
 
-// ── Camera ───────────────────────────────────────────────────
+// â”€â”€ Camera â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const CAMERA_FOLLOW_LERP = 0.1;
 export const CAMERA_FOLLOW_SNAP_THRESHOLD = 0.5;
 
-// ── Zoom ─────────────────────────────────────────────────────
+// â”€â”€ Zoom â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const ZOOM_MIN = 1;
 export const ZOOM_MAX = 10;
 export const ZOOM_DEFAULT_DPR_FACTOR = 2;
@@ -90,11 +90,11 @@ export const ZOOM_LEVEL_FADE_DURATION_SEC = 0.5;
 export const ZOOM_SCROLL_THRESHOLD = 50;
 export const PAN_MARGIN_FRACTION = 0.25;
 
-// ── Editor ───────────────────────────────────────────────────
+// â”€â”€ Editor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const UNDO_STACK_MAX_SIZE = 50;
 export const LAYOUT_SAVE_DEBOUNCE_MS = 500;
 
-// ── Layout Import/Export (browser-native, standalone) ────────
+// â”€â”€ Layout Import/Export (browser-native, standalone) â”€â”€â”€â”€â”€â”€â”€â”€
 /** Suggested filename when exporting the office layout from the standalone browser. */
 export const LAYOUT_EXPORT_FILENAME = 'pixel-agents-layout.json';
 /** MIME type for the exported layout Blob. */
@@ -103,7 +103,7 @@ export const DEFAULT_FLOOR_COLOR: ColorValue = { h: 35, s: 30, b: 15, c: 0 };
 export const DEFAULT_WALL_COLOR: ColorValue = { h: 240, s: 25, b: 0, c: 0 };
 export const DEFAULT_NEUTRAL_COLOR: ColorValue = { h: 0, s: 0, b: 0, c: 0 };
 
-// ── Carpets ──────────────────────────────────────────────────
+// â”€â”€ Carpets â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 /** Main (lowest-luminance) color applied to carpets when no per-tile override is set. */
 export const CARPET_DEFAULT_COLOR: ColorValue = { h: 0, s: 71, b: -32, c: 0, colorize: true };
 /** Accent (highest-luminance) color applied to carpets when no per-tile override is set. */
@@ -117,7 +117,7 @@ export const CARPET_DEFAULT_ACCENT_COLOR: ColorValue = {
 /** Keyboard key that switches from CARPET_PAINT to CARPET_PICK while editing. */
 export const KEY_CARPET_PICK = 'p';
 
-// ── Areas (named, colored workspace-folder zones) ────────────
+// â”€â”€ Areas (named, colored workspace-folder zones) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 /** Color palette assigned to new Areas in rotation (cycles when more areas exist). */
 export const AREA_DEFAULT_COLORS: readonly string[] = [
   '#ff6b6b',
@@ -146,13 +146,13 @@ export const AREA_LABEL_SHADOW_COLOR = '#000000';
 /** Drop-shadow alpha behind area labels. */
 export const AREA_LABEL_SHADOW_ALPHA = 0.6;
 
-// ── VisualColorPicker (HSV wheel + brightness for carpets) ───
+// â”€â”€ VisualColorPicker (HSV wheel + brightness for carpets) â”€â”€â”€
 export const VISUAL_COLOR_PICKER_SV_SIZE_PX = 180;
 export const VISUAL_COLOR_PICKER_HUE_WIDTH_PX = 20;
 export const VISUAL_COLOR_PICKER_MARKER_RADIUS_PX = 6;
 /**
  * The hue bar gradient is intrinsic to the color-picking interaction, not a
- * theme color — it must span the full hue circle. Centralized here so the
+ * theme color â€” it must span the full hue circle. Centralized here so the
  * component body stays free of inline color literals. (The saturation/brightness
  * square is painted to a canvas from the carpet HSL model, not a CSS gradient.)
  */
@@ -169,7 +169,7 @@ export const VISUAL_COLOR_PICKER_SWATCH_PX = 22;
 /** Gap (px) between the collapsed trigger and the expanded popup panel. */
 export const VISUAL_COLOR_PICKER_POPUP_GAP_PX = 6;
 
-// ── Notification Sound (done: ascending chime) ─────────────
+// â”€â”€ Notification Sound (done: ascending chime) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const NOTIFICATION_NOTE_1_HZ = 659.25; // E5
 export const NOTIFICATION_NOTE_2_HZ = 1318.51; // E6 (octave up)
 export const NOTIFICATION_NOTE_1_START_SEC = 0;
@@ -177,7 +177,7 @@ export const NOTIFICATION_NOTE_2_START_SEC = 0.1;
 export const NOTIFICATION_NOTE_DURATION_SEC = 0.18;
 export const NOTIFICATION_VOLUME = 0.14;
 
-// ── Permission Sound (attention: descending double tap) ────
+// â”€â”€ Permission Sound (attention: descending double tap) â”€â”€â”€â”€
 export const PERMISSION_NOTE_1_HZ = 880; // A5
 export const PERMISSION_NOTE_2_HZ = 659.25; // E5 (down a fourth)
 export const PERMISSION_NOTE_1_START_SEC = 0;
@@ -185,14 +185,14 @@ export const PERMISSION_NOTE_2_START_SEC = 0.12;
 export const PERMISSION_NOTE_DURATION_SEC = 0.15;
 export const PERMISSION_VOLUME = 0.12;
 
-// ── Furniture Animation ─────────────────────────────────────
+// â”€â”€ Furniture Animation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const FURNITURE_ANIM_INTERVAL_SEC = 0.2;
 
-// ── Version Notice ──────────────────────────────────────────
+// â”€â”€ Version Notice â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const WHATS_NEW_AUTO_CLOSE_MS = 20000;
 export const WHATS_NEW_FADE_MS = 1000;
 
-// ── Game Logic ───────────────────────────────────────────────
+// â”€â”€ Game Logic â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const MAX_DELTA_TIME_SEC = 0.1;
 export const WAITING_BUBBLE_DURATION_SEC = 2.0;
 export const DISMISS_BUBBLE_FAST_FADE_SEC = 0.3;
@@ -206,7 +206,7 @@ export const CHARACTER_HIT_HALF_WIDTH = 8;
 export const CHARACTER_HIT_HEIGHT = 24;
 export const TOOL_OVERLAY_VERTICAL_OFFSET = 32;
 
-// ── Greeter + Intro bubble ──────────────────────────────────
+// â”€â”€ Greeter + Intro bubble â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 /** Reserved character id for the Intro's greeter. Far outside both real agent
  *  ids (positive) and sub-agent ids (small negatives from -1 down). */
 export const GREETER_ID = -1_000_000_000;
@@ -222,7 +222,7 @@ export const GREETER_TILE_MARGIN = 3;
  *  Kept well above the head target (INTRO_TAIL_TARGET_RISE_WORLD) so the
  *  tail squares have a visible run between bubble and head. */
 export const INTRO_BUBBLE_ANCHOR_RISE_WORLD = 44;
-/** World px right of the greeter's center where the bubble's left edge starts —
+/** World px right of the greeter's center where the bubble's left edge starts â€”
  *  just clear of the sprite so the tail points down-left at the head. */
 export const INTRO_BUBBLE_OFFSET_X_WORLD = 10;
 /** Bubble width cap (CSS px) and the margin kept from the container edges.
@@ -242,7 +242,7 @@ export const INTRO_TAIL_STEPS = [
   { t: 0.55, size: 9 },
   { t: 0.82, size: 6 },
 ] as const;
-/** World px above the greeter's anchor (feet) the tail points at — the head. */
+/** World px above the greeter's anchor (feet) the tail points at â€” the head. */
 export const INTRO_TAIL_TARGET_RISE_WORLD = 26;
 /** Camera-offset caps while centering character + bubble. The ideal composition
  *  assumes the bubble fits beside/above the character; when it can't (narrow or
@@ -256,7 +256,7 @@ export const INTRO_CAMERA_MIN_CHAR_VISIBLE_WORLD = 48;
  *  sits a bit above the vertical center instead of dead-centered. */
 export const INTRO_CAMERA_DOWN_SHIFT_PX = 50;
 
-// ── Context Fuel Gauge ──────────────────────────────────────
+// â”€â”€ Context Fuel Gauge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 /** Window assumed before the runtime reports one (it always does for agents
  *  that have taken a turn; this only covers characters created ahead of it). */
 export const DEFAULT_MAX_CONTEXT_TOKENS = 200_000;
@@ -271,16 +271,16 @@ export const CONTEXT_GAUGE_COLOR_DANGER = '#ff8800';
 export const CONTEXT_GAUGE_COLOR_CRITICAL = '#ff2222';
 export const CONTEXT_GAUGE_BG = '#222';
 
-// ── Agent Teams ─────────────────────────────────────────────
+// â”€â”€ Agent Teams â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const TEAM_LEAD_COLOR = '#ffd700';
 export const TEAM_ROLE_COLOR = '#66aaff';
 
-// ── Pets ────────────────────────────────────────────────────────
+// â”€â”€ Pets â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 /** Walking speed in world pixels per second (matches character walk speed visually but slower). */
 export const PET_WALK_SPEED_PX_PER_SEC = 32;
-/** Time per WALK animation cycle step (4 cycle steps × 0.15s = 0.6s per loop). */
+/** Time per WALK animation cycle step (4 cycle steps Ã— 0.15s = 0.6s per loop). */
 export const PET_WALK_FRAME_DURATION_SEC = 0.15;
-/** Time per IDLE animation cycle step (4 cycle steps × 0.3s = 1.2s per loop). */
+/** Time per IDLE animation cycle step (4 cycle steps Ã— 0.3s = 1.2s per loop). */
 export const PET_IDLE_FRAME_DURATION_SEC = 0.3;
 /** Walk cycle: 4-step lookup into the 3-frame walkDown/walkUp/walkRight arrays. */
 export const PET_WALK_SEQUENCE = [0, 1, 0, 2] as const;

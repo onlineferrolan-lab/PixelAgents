@@ -66,14 +66,14 @@ export class OfficeState {
   cameraFollowId: number | null = null;
   hoveredAgentId: number | null = null;
   hoveredTile: { col: number; row: number } | null = null;
-  /** Maps "parentId:toolId" → sub-agent character ID (negative) */
+  /** Maps "parentId:toolId" â†’ sub-agent character ID (negative) */
   subagentIdMap: Map<string, number> = new Map();
-  /** Reverse lookup: sub-agent character ID → parent info */
+  /** Reverse lookup: sub-agent character ID â†’ parent info */
   subagentMeta: Map<number, { parentAgentId: number; parentToolId: string }> = new Map();
   private nextSubagentId = -1;
 
   /**
-   * folderName → list of Area labels that workspace folder belongs to.
+   * folderName â†’ list of Area labels that workspace folder belongs to.
    * Populated by useExtensionMessages on `areaMappingsLoaded`. Consulted by
    * `findFreeSeat()` to bias new agents toward seats inside their folder's Area.
    */
@@ -82,9 +82,9 @@ export class OfficeState {
   /**
    * The first-run consent greeter, deliberately NOT in `characters`.
    *
-   * `characters` means "agents": everything that iterates it — seat
+   * `characters` means "agents": everything that iterates it â€” seat
    * assignment, palette diversity, the wander FSM, hit-testing, the seat
-   * payload the webview persists — is asking an agent question the greeter has
+   * payload the webview persists â€” is asking an agent question the greeter has
    * no answer to. Holding it here instead of tagging it with a flag makes
    * every one of those loops correct by default, rather than correct as long
    * as each remembers an `isGreeter` guard. It is drawn because
@@ -367,7 +367,7 @@ export class OfficeState {
 
     const areaLabels = folderName ? this.areaMappings[folderName] : undefined;
 
-    // Stage 1 — in-area seats for the folder's mapped Area labels.
+    // Stage 1 â€” in-area seats for the folder's mapped Area labels.
     if (areaLabels && areaLabels.length > 0) {
       const wanted = new Set(areaLabels);
       const inArea = freeSeats.filter((uid) => {
@@ -378,12 +378,12 @@ export class OfficeState {
       if (pick) return pick;
     }
 
-    // Stage 2 — unzoned seats (no area label, or layout has no areas at all).
+    // Stage 2 â€” unzoned seats (no area label, or layout has no areas at all).
     const unzoned = freeSeats.filter((uid) => this.seatZone(uid) === null);
     const pick2 = this.pickFromSeats(unzoned, electronicsTiles);
     if (pick2) return pick2;
 
-    // Stage 3 — any free seat.
+    // Stage 3 â€” any free seat.
     return this.pickFromSeats(freeSeats, electronicsTiles);
   }
 
@@ -409,7 +409,7 @@ export class OfficeState {
   /**
    * Pick a diverse palette for a new agent based on currently active agents.
    * First 6 agents each get a unique skin (random order). Beyond 6, skins
-   * repeat in balanced rounds with a random hue shift (≥45°).
+   * repeat in balanced rounds with a random hue shift (â‰¥45Â°).
    */
   private pickDiversePalette(): { palette: number; hueShift: number } {
     // Count how many non-sub-agents use each base palette (0-5)
@@ -470,7 +470,7 @@ export class OfficeState {
       seat.assigned = true;
       ch = createCharacter(id, palette, seatId, seat, hueShift);
     } else {
-      // No seats — teammates spawn beside their anchor, others at a random walkable tile
+      // No seats â€” teammates spawn beside their anchor, others at a random walkable tile
       let spawn = anchorAt ? this.closestFreeWalkableTile(anchorAt.col, anchorAt.row) : null;
       if (!spawn) {
         spawn =
@@ -494,10 +494,10 @@ export class OfficeState {
     this.characters.set(id, ch);
   }
 
-  // ── Greeter ───────────────────────────────────────────────────
+  // â”€â”€ Greeter â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   // The Intro is diegetic: a char_0 character stands near the office's
   // bottom-left corner and "speaks" the tour through a DOM bubble
-  // (IntroBubble). It is not an agent — see the `greeter` field.
+  // (IntroBubble). It is not an agent â€” see the `greeter` field.
 
   /** Spawn the greeter near the office's bottom-left corner: target tile
    *  GREETER_TILE_MARGIN in from the left and bottom edges, falling
@@ -515,7 +515,7 @@ export class OfficeState {
       GREETER_TILE_MARGIN,
       this.layout.rows - 1 - GREETER_TILE_MARGIN,
     );
-    if (!spawn) return; // no walkable tile — IntroBubble falls back to a fixed panel
+    if (!spawn) return; // no walkable tile â€” IntroBubble falls back to a fixed panel
     const ch = createCharacter(GREETER_ID, 0, null, null, 0);
     ch.isGreeter = true;
     ch.state = CharacterState.IDLE;
@@ -531,7 +531,7 @@ export class OfficeState {
 
   /** Start the greeter's despawn effect and release the greeter camera. The
    *  character is dropped once the effect finishes (see update()).
-   *  Idempotent — every close path (answer, Escape, hooksStatus) funnels here. */
+   *  Idempotent â€” every close path (answer, Escape, hooksStatus) funnels here. */
   despawnGreeter(): void {
     this.greeterCameraTarget = null;
     this.greeterCameraCancelled = false;
@@ -599,7 +599,7 @@ export class OfficeState {
       ch.frame = 0;
       ch.frameTimer = 0;
     } else {
-      // Already at seat or no path — sit down
+      // Already at seat or no path â€” sit down
       ch.state = CharacterState.TYPE;
       ch.dir = seat.facingDir;
       ch.frame = 0;
@@ -613,7 +613,7 @@ export class OfficeState {
   /**
    * Move a just-linked teammate to the free seat closest to its lead, so teams
    * cluster. Only moves when that seat is strictly closer than the teammate's
-   * current one — a teammate created as a plain external agent (seated by an
+   * current one â€” a teammate created as a plain external agent (seated by an
    * arbitrary findFreeSeat) and tagged as a teammate only after tag discovery
    * would otherwise keep its arbitrary seat, unlike an inline teammate seated
    * next to the lead at creation.
@@ -654,7 +654,7 @@ export class OfficeState {
       ch.frame = 0;
       ch.frameTimer = 0;
     } else {
-      // Already at seat — sit down
+      // Already at seat â€” sit down
       ch.state = CharacterState.TYPE;
       ch.dir = seat.facingDir;
       ch.frame = 0;
@@ -730,7 +730,7 @@ export class OfficeState {
     const ch = this.characters.get(id);
     if (ch) {
       if (ch.matrixEffect === 'despawn') {
-        // Already despawning — just clean up maps
+        // Already despawning â€” just clean up maps
         this.subagentIdMap.delete(key);
         this.subagentMeta.delete(id);
         return;
@@ -739,7 +739,7 @@ export class OfficeState {
         const seat = this.seats.get(ch.seatId);
         if (seat) seat.assigned = false;
       }
-      // Start despawn animation — keep character in map for rendering
+      // Start despawn animation â€” keep character in map for rendering
       startMatrixEffect(ch, 'despawn');
       ch.bubbleType = null;
     }
@@ -759,7 +759,7 @@ export class OfficeState {
         const ch = this.characters.get(id);
         if (ch) {
           if (ch.matrixEffect === 'despawn') {
-            // Already despawning — just clean up maps
+            // Already despawning â€” just clean up maps
             this.subagentMeta.delete(id);
             toRemove.push(key);
             continue;
@@ -903,7 +903,7 @@ export class OfficeState {
     }
   }
 
-  /** Dismiss bubble on click — permission: instant, waiting: quick fade */
+  /** Dismiss bubble on click â€” permission: instant, waiting: quick fade */
   dismissBubble(id: number): void {
     const ch = this.characters.get(id);
     if (!ch || !ch.bubbleType) return;
@@ -916,7 +916,7 @@ export class OfficeState {
     }
   }
 
-  // ── Pets ──────────────────────────────────────────────────────
+  // â”€â”€ Pets â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   /**
    * Add a pet to the live runtime. Spawns at a uniformly-random walkable tile.
@@ -940,7 +940,7 @@ export class OfficeState {
       return;
     }
     if (this.pets.some((p) => p.id === placedPet.id)) return; // de-dupe
-    if (this.walkableTiles.length === 0) return; // no spawn space — silently drop
+    if (this.walkableTiles.length === 0) return; // no spawn space â€” silently drop
 
     const spawn = this.walkableTiles[Math.floor(Math.random() * this.walkableTiles.length)];
     const pet = createPet(placedPet.id, placedPet.petType, spawn.col, spawn.row);
@@ -1006,9 +1006,9 @@ export class OfficeState {
 
   /**
    * Reconcile `this.pets` to match the layout's placed-pet roster.
-   * - Pets in layout but not in runtime → spawn via addPet().
-   * - Pets in runtime but not in layout → remove.
-   * - Pets in both → keep existing runtime state (position, FSM).
+   * - Pets in layout but not in runtime â†’ spawn via addPet().
+   * - Pets in runtime but not in layout â†’ remove.
+   * - Pets in both â†’ keep existing runtime state (position, FSM).
    *
    * Called from constructor and rebuildFromLayout. Always runs AFTER walkableTiles
    * is populated.
@@ -1033,7 +1033,7 @@ export class OfficeState {
 
   /**
    * Re-export the current pet roster into `this.layout.pets`. Called only from
-   * mutating methods (addPet / removePet / rebuildPetsFromLayout) — NEVER from
+   * mutating methods (addPet / removePet / rebuildPetsFromLayout) â€” NEVER from
    * getLayout(), which runs on every render frame.
    */
   private syncLayoutPets(): void {
@@ -1096,7 +1096,7 @@ export class OfficeState {
     }
 
     // The greeter materializes and dematerializes like anyone else, but runs
-    // no FSM — it stands where it spawned for as long as the ask is up.
+    // no FSM â€” it stands where it spawned for as long as the ask is up.
     if (this.greeter && advanceMatrixEffect(this.greeter, dt) === 'despawned') {
       this.greeter = null;
     }
@@ -1110,8 +1110,14 @@ export class OfficeState {
       }
 
       // Temporarily unblock own seat so character can pathfind to it
+      const descansoTiles = this.walkableTiles.filter(({ col, row }) =>
+        this.layout.areaTiles?.[row * this.layout.cols + col] === 'Descanso',
+      );
+      const movementTiles =
+        !ch.isActive && descansoTiles.length > 0 ? descansoTiles : this.walkableTiles;
+
       this.withOwnSeatUnblocked(ch, () =>
-        updateCharacter(ch, dt, this.walkableTiles, this.seats, this.tileMap, this.blockedTiles),
+        updateCharacter(ch, dt, movementTiles, this.seats, this.tileMap, this.blockedTiles),
       );
 
       // Tick bubble timer for waiting bubbles
@@ -1128,7 +1134,7 @@ export class OfficeState {
       this.characters.delete(id);
     }
 
-    // ── Pet FSM ────────────────────────────────────────────────
+    // â”€â”€ Pet FSM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     for (const pet of this.pets) {
       updatePet(pet, dt, this.walkableTiles, this.characters, this.tileMap, this.blockedTiles);
 
@@ -1145,7 +1151,7 @@ export class OfficeState {
 
   /** The `saveAgentSeats` payload: palette, hue and seat for every agent worth
    *  restoring. Sub-agents are excluded because they are derived state the
-   *  runtime re-materializes, and the greeter never reaches here at all —
+   *  runtime re-materializes, and the greeter never reaches here at all â€”
    *  it is not in `characters`. */
   getPersistableSeats(): Record<
     number,
@@ -1161,7 +1167,7 @@ export class OfficeState {
 
   /** Everything the renderer draws: the agents plus, while the first-run ask
    *  is up, the consent greeter. This is the ONE place the greeter joins the
-   *  agents — every other consumer reads `characters` and gets agents only. */
+   *  agents â€” every other consumer reads `characters` and gets agents only. */
   getCharacters(): Character[] {
     const chars = Array.from(this.characters.values());
     if (this.greeter) chars.push(this.greeter);

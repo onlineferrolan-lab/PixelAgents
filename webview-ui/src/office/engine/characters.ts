@@ -7,8 +7,6 @@ import {
   WALK_SPEED_PX_PER_SEC,
   WANDER_MOVES_BEFORE_REST_MAX,
   WANDER_MOVES_BEFORE_REST_MIN,
-  WANDER_PAUSE_MAX_SEC,
-  WANDER_PAUSE_MIN_SEC,
 } from '../../constants.js';
 import { findPath } from '../layout/tileMap.js';
 import type { CharacterSprites } from '../sprites/spriteData.js';
@@ -115,21 +113,21 @@ export function updateCharacter(
         ch.state = CharacterState.IDLE;
         ch.frame = 0;
         ch.frameTimer = 0;
-        ch.wanderTimer = randomRange(WANDER_PAUSE_MIN_SEC, WANDER_PAUSE_MAX_SEC);
+        ch.wanderTimer = 3 + Math.random() * 7;
         ch.wanderCount = 0;
-        ch.wanderLimit = randomInt(WANDER_MOVES_BEFORE_REST_MIN, WANDER_MOVES_BEFORE_REST_MAX);
+        ch.wanderLimit = Number.MAX_SAFE_INTEGER;
       }
       break;
     }
 
     case CharacterState.IDLE: {
-      // No idle animation — static pose
+      // No idle animation ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â static pose
       ch.frame = 0;
       if (ch.seatTimer < 0) ch.seatTimer = 0; // clear turn-end sentinel
       // If became active, pathfind to seat
       if (ch.isActive) {
         if (!ch.seatId) {
-          // No seat assigned — type in place
+          // No seat assigned ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â type in place
           ch.state = CharacterState.TYPE;
           ch.frame = 0;
           ch.frameTimer = 0;
@@ -152,7 +150,7 @@ export function updateCharacter(
             ch.frame = 0;
             ch.frameTimer = 0;
           } else {
-            // Already at seat or no path — sit down
+            // Already at seat or no path ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â sit down
             ch.state = CharacterState.TYPE;
             ch.dir = seat.facingDir;
             ch.frame = 0;
@@ -164,7 +162,7 @@ export function updateCharacter(
       // Countdown wander timer
       ch.wanderTimer -= dt;
       if (ch.wanderTimer <= 0) {
-        // Check if we've wandered enough — return to seat for a rest
+        // Check if we've wandered enough ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â return to seat for a rest
         if (ch.wanderCount >= ch.wanderLimit && ch.seatId) {
           const seat = seats.get(ch.seatId);
           if (seat) {
@@ -205,7 +203,7 @@ export function updateCharacter(
             ch.wanderCount++;
           }
         }
-        ch.wanderTimer = randomRange(WANDER_PAUSE_MIN_SEC, WANDER_PAUSE_MAX_SEC);
+        ch.wanderTimer = 3 + Math.random() * 7;
       }
       break;
     }
@@ -218,14 +216,14 @@ export function updateCharacter(
       }
 
       if (ch.path.length === 0) {
-        // Path complete — snap to tile center and transition
+        // Path complete ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â snap to tile center and transition
         const center = tileCenter(ch.tileCol, ch.tileRow);
         ch.x = center.x;
         ch.y = center.y;
 
         if (ch.isActive) {
           if (!ch.seatId) {
-            // No seat — type in place
+            // No seat ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â type in place
             ch.state = CharacterState.TYPE;
           } else {
             const seat = seats.get(ch.seatId);
@@ -237,14 +235,14 @@ export function updateCharacter(
             }
           }
         } else {
-          // Check if arrived at assigned seat — sit down for a rest before wandering again
+          // Check if arrived at assigned seat ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â sit down for a rest before wandering again
           if (ch.seatId) {
             const seat = seats.get(ch.seatId);
             if (seat && ch.tileCol === seat.seatCol && ch.tileRow === seat.seatRow) {
               ch.state = CharacterState.TYPE;
               ch.dir = seat.facingDir;
               // seatTimer < 0 is a sentinel from setAgentActive(false) meaning
-              // "turn just ended" — skip the long rest so idle transition is immediate
+              // "turn just ended" ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â skip the long rest so idle transition is immediate
               if (ch.seatTimer < 0) {
                 ch.seatTimer = 0;
               } else {
@@ -261,7 +259,7 @@ export function updateCharacter(
             }
           }
           ch.state = CharacterState.IDLE;
-          ch.wanderTimer = randomRange(WANDER_PAUSE_MIN_SEC, WANDER_PAUSE_MAX_SEC);
+          ch.wanderTimer = 3 + Math.random() * 7;
         }
         ch.frame = 0;
         ch.frameTimer = 0;

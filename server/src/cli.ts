@@ -27,10 +27,10 @@ import {
 } from './configPersistence.js';
 import { MAX_PORT, MIN_PORT } from './constants.js';
 import { FileStateAdapter } from './fileStateAdapter.js';
-import { claudeProvider, copyHookScript, hookProviderById } from './providers/index.js';
+import { claudeProvider, copyHookScript, hermesProvider, hookProviderById } from './providers/index.js';
 import { PixelAgentsServer } from './server.js';
 
-// ── Argument parsing ──────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬ Argument parsing Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
 export interface CliArgs {
   /** Unset -> ephemeral (OS-assigned) port, so multiple standalone instances
@@ -78,11 +78,11 @@ Options:
   return args;
 }
 
-// ── Hooks consent ─────────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬ Hooks consent Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 // First-run consent is asked IN THE APP, not here: the server sends a
 // hooksConsentRequest to privileged (tokened) connections during the
 // webviewReady handshake (clientMessageHandler.ts), and the browser renders
-// the dialog — the same UX the VS Code webview shows. The CLI itself never
+// the dialog Ã¢â‚¬â€ the same UX the VS Code webview shows. The CLI itself never
 // prompts; a headless run just starts without hooks until consent is granted
 // through the UI. The one exception that needs no dialog is the silent-grant
 // migration below (our hooks already installed by a pre-consent version).
@@ -101,7 +101,7 @@ function copyHookScriptOrReport(packageRoot: string, context = ''): boolean {
   return false;
 }
 
-// ── Main ──────────────────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬ Main Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
 async function main(): Promise<void> {
   let args: CliArgs;
@@ -117,7 +117,7 @@ async function main(): Promise<void> {
   const packageRoot = path.dirname(distRoot);
   const staticDir = path.join(distRoot, 'webview');
 
-  // ── Load assets on startup (same pipeline as VS Code extension) ──
+  // Ã¢â€â‚¬Ã¢â€â‚¬ Load assets on startup (same pipeline as VS Code extension) Ã¢â€â‚¬Ã¢â€â‚¬
   // External asset directories are merged at startup too, so directories added
   // in a previous session survive a restart. buildAssetCache is the shared
   // loader used by both the standalone server and the VS Code adapter.
@@ -133,17 +133,17 @@ async function main(): Promise<void> {
     `[Pixel Agents] Assets loaded: ${charCount} characters, ${petCount} pets, ${furnitureCount} furniture items`,
   );
 
-  // ── Store + adapter (shared settings + standalone-scoped agents/seats) ──
+  // Ã¢â€â‚¬Ã¢â€â‚¬ Store + adapter (shared settings + standalone-scoped agents/seats) Ã¢â€â‚¬Ã¢â€â‚¬
   const store = new AgentStateStore();
   const adapter = new FileStateAdapter({ namespace: 'standalone' });
   store.setAdapter(adapter);
 
-  // ── Create server ──
+  // Ã¢â€â‚¬Ã¢â€â‚¬ Create server Ã¢â€â‚¬Ã¢â€â‚¬
   const server = new PixelAgentsServer();
 
   try {
     // Create runtime first (before server.start, so we can pass it in)
-    const runtime = new AgentRuntime(store, claudeProvider);
+    const runtime = new AgentRuntime(store, hermesProvider);
 
     // Wire hook events: HTTP POST -> runtime -> hookEventHandler -> agents
     server.onHookEvent((providerId, event) => {
@@ -244,27 +244,27 @@ async function main(): Promise<void> {
     // runtime's single hooksEnabled ref follows the Claude provider until the
     // scanners grow per-provider awareness alongside the Settings UI.
     runtime.hooksEnabled.current = getHooksEnabled(claudeProvider.id);
-    runtime.watchAllSessions.current = adapter.getSetting('pixel-agents.watchAllSessions', false);
+    runtime.watchAllSessions.current = true;
 
-    // Install hooks on startup if the persisted setting says so — gated on the
+    // Install hooks on startup if the persisted setting says so Ã¢â‚¬â€ gated on the
     // one-time consent to modify ~/.claude/settings.json.
     if (runtime.hooksEnabled.current) {
       let consent = getHooksConsent(claudeProvider.id) === 'granted';
       if (!consent && (await claudeProvider.areHooksInstalled())) {
-        // Our hooks are already installed and already firing — a pre-consent
+        // Our hooks are already installed and already firing Ã¢â‚¬â€ a pre-consent
         // version put them there. Grant and continue with NO prompt: the
         // install below is the 14 -> 12 migration, and it only ever REDUCES
         // scope (it drops UserPromptSubmit and TaskCreated, the two events that
         // forwarded prompt text and were consumed by nothing). Asking would buy
         // this user no protection they do not already have, so they are not
-        // asked. A fresh install still is, in full — in the browser UI, when a
+        // asked. A fresh install still is, in full Ã¢â‚¬â€ in the browser UI, when a
         // tokened client connects (clientMessageHandler's webviewReady).
         grantHooksConsent(claudeProvider.id);
         consent = true;
       }
       if (!consent) {
         console.log(
-          '[Pixel Agents] Hooks not installed: modifying ~/.claude/settings.json needs one-time approval — open the URL below to review and approve it.',
+          '[Pixel Agents] Hooks not installed: modifying ~/.claude/settings.json needs one-time approval Ã¢â‚¬â€ open the URL below to review and approve it.',
         );
       } else if (copyHookScriptOrReport(packageRoot)) {
         try {
@@ -276,15 +276,15 @@ async function main(): Promise<void> {
       }
     } else {
       // Without this line, a persisted hooks-off makes startup skip the entire
-      // consent/install flow with zero output — indistinguishable from a bug.
+      // consent/install flow with zero output Ã¢â‚¬â€ indistinguishable from a bug.
       console.log(
-        '[Pixel Agents] Hooks disabled — enable "Instant Detection (Hooks)" in the UI settings to install them.',
+        '[Pixel Agents] Hooks disabled Ã¢â‚¬â€ enable "Instant Detection (Hooks)" in the UI settings to install them.',
       );
     }
 
     // Start scanning for external sessions (Claude running in user's terminal)
     const cwd = process.cwd();
-    const dirs = claudeProvider.getSessionDirs?.(cwd);
+    const dirs = hermesProvider.getSessionDirs?.(cwd);
     if (dirs && dirs[0]) {
       const projectDir = dirs[0];
       console.log(`[Pixel Agents] Scanning project dir: ${projectDir}`);
@@ -294,7 +294,7 @@ async function main(): Promise<void> {
     }
 
     // The URL the operator opens has to be REACHABLE (a wildcard bind address
-    // is a bind target, not an address you can browse to — `--host 0.0.0.0`
+    // is a bind target, not an address you can browse to Ã¢â‚¬â€ `--host 0.0.0.0`
     // used to print a dead `http://0.0.0.0:PORT`) and has to carry the token,
     // which is what makes the session it loads privileged enough to approve a
     // hook install (see standaloneTokenValid in httpServer.ts). Under `--host
@@ -306,7 +306,7 @@ async function main(): Promise<void> {
       `\n  Pixel Agents server running at http://${displayHost}:${config.port}/?token=${config.token}\n`,
     );
 
-    // ── Graceful shutdown ──
+    // Ã¢â€â‚¬Ã¢â€â‚¬ Graceful shutdown Ã¢â€â‚¬Ã¢â€â‚¬
     function shutdown(): void {
       console.log('\nShutting down...');
       runtime.dispose();
@@ -332,3 +332,5 @@ if (require.main === module) {
     process.exit(1);
   });
 }
+
+

@@ -192,7 +192,7 @@ export class AgentRuntime {
             }
           }
         }
-        if (!isTrackedProjectDir(projectDir) && !this.watchAllSessions.current) {
+        if (provider.id !== 'hermes' && !isTrackedProjectDir(projectDir) && !this.watchAllSessions.current) {
           console.log(
             `[Pixel Agents] Hook: external session ${sessionId.slice(0, 8)}... not adopted ` +
               `(project untracked, Watch All Sessions off)`,
@@ -285,7 +285,7 @@ export class AgentRuntime {
     this.lifecycleCallbacks = callbacks;
   }
 
-  // ── Hook event routing ──
+  // â”€â”€ Hook event routing â”€â”€
 
   /** Route an incoming hook event to the appropriate agent. */
   handleHookEvent(providerId: string, event: Record<string, unknown>): void {
@@ -302,7 +302,7 @@ export class AgentRuntime {
     this.hookEventHandler.unregisterAgent(sessionId);
   }
 
-  // ── Agent removal (shared cleanup) ──
+  // â”€â”€ Agent removal (shared cleanup) â”€â”€
 
   /** Remove an agent: stop watchers, cancel timers, delete from store. */
   removeAgent(id: number): void {
@@ -397,7 +397,7 @@ export class AgentRuntime {
     }
   }
 
-  // ── Scanning ──
+  // â”€â”€ Scanning â”€â”€
 
   /** Start project-level scanning for a directory. */
   startProjectScan(projectDir: string, onAgentCreated?: (agent: AgentState) => void): void {
@@ -449,7 +449,7 @@ export class AgentRuntime {
     );
   }
 
-  // ── Restore persisted external agents (standalone) ──
+  // â”€â”€ Restore persisted external agents (standalone) â”€â”€
 
   /**
    * Re-create external agents from the adapter's persistence on startup.
@@ -554,7 +554,7 @@ export class AgentRuntime {
     this.store.persist();
   }
 
-  // ── Cleanup ──
+  // â”€â”€ Cleanup â”€â”€
 
   /** Clean up all scanners, timers, and agents. Called on shutdown. */
   dispose(): void {

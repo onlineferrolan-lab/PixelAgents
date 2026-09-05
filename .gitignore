@@ -50,3 +50,19 @@ agent-orchestrator.yaml
 .ao/
 .serena/
 tasks/
+
+# Media (never commit — heavy binaries)
+*.mp4
+*.mov
+*.webm
+*.avi
+*.mkv
+*.m4v
+*.wav
+*.aiff
+
+# Local backup scratch files
+*.backup.ts
+*.backup.tsx
+*.bak
+*.orig

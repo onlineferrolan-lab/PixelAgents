@@ -23,7 +23,7 @@ export interface HookEvent {
 
 /**
  * Dispatches normalized AgentEvents to agents based on session_id.
- * Session routing (session→agent mapping, pending sessions, event buffering)
+ * Session routing (sessionâ†’agent mapping, pending sessions, event buffering)
  * is delegated to an injected SessionRouter instance.
  *
  * When an event is successfully delivered, sets `agent.hookDelivered = true` which
@@ -133,7 +133,7 @@ export class HookEventHandler {
     if (this.provider.protocolVersion !== HookEventHandler.SUPPORTED_PROTOCOL_VERSION) {
       return; // version mismatch already logged in constructor
     }
-    // ── Provider normalization boundary ───────────────────────────────────────
+    // â”€â”€ Provider normalization boundary â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // All raw Claude-specific fields (tool_name, tool_input, agent_type, teammate_name,
     // task_subject, notification_type,
     // reason, source) are extracted by provider.normalizeHookEvent. Downstream dispatch
@@ -200,6 +200,15 @@ export class HookEventHandler {
             );
           return;
         }
+      }
+      // HERMES sessions are real gateway sessions: adopt immediately.
+      if (this.provider.id === 'hermes' && (cwd || transcriptPath)) {
+        this.lifecycleCallbacks.onExternalSessionDetected?.(
+          event.session_id,
+          transcriptPath,
+          cwd ?? '',
+        );
+        return;
       }
       // /clear or /resume: reassign existing agent to new session
       if (normEvent.source === 'clear' || normEvent.source === 'resume') {
@@ -396,7 +405,7 @@ export class HookEventHandler {
         }
       }, SESSION_END_GRACE_MS);
     } else {
-      // Immediate cleanup for exit/logout. onSessionEnd → removeTeammates in the
+      // Immediate cleanup for exit/logout. onSessionEnd â†’ removeTeammates in the
       // ViewProvider cleans up all teammates of this lead at once.
       this.markAgentWaiting(agent, agentId);
       this.lifecycleCallbacks.onSessionEnd?.(agentId, reason ?? 'unknown');
@@ -438,7 +447,7 @@ export class HookEventHandler {
     agent.hadToolsInTurn = true;
 
     // Send tool start + active state to webview (instant, no 500ms JSONL delay).
-    // Skip for Task/Agent tools — their sub-agent characters need the stable JSONL
+    // Skip for Task/Agent tools â€” their sub-agent characters need the stable JSONL
     // tool ID (not the transient hook ID) so that SubagentStop/tool_result cleanup
     // can find and remove them. JSONL handles agentToolStart (with runInBackground)
     // for these tools.
@@ -650,7 +659,7 @@ export class HookEventHandler {
     const inlineTeammates = getInlineTeammates(agentId, this.agents);
 
     if (inlineTeammates.length === 0) {
-      // No inline teammates — treat as a completed turn for this agent.
+      // No inline teammates â€” treat as a completed turn for this agent.
       this.markAgentWaiting(agent, agentId);
       return;
     }
