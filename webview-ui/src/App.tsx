@@ -114,7 +114,11 @@ function App() {
   const [isHooksInfoOpen, setIsHooksInfoOpen] = useState(false);
   const [hooksTooltipDismissed, setHooksTooltipDismissed] = useState(false);
   const [isDebugMode, setIsDebugMode] = useState(false);
-  const [alwaysShowOverlay, setAlwaysShowOverlay] = useState(false);
+  // Kiosk: nobody can hover or click a wall display, and the default only
+  // labels agents that are busy — so an idle office becomes six anonymous
+  // sprites. Labels stay on permanently there, which is the whole point of
+  // the screen: seeing at a glance who is who and who is working.
+  const [alwaysShowOverlay, setAlwaysShowOverlay] = useState(isKioskMode);
 
   const currentMajorMinor = toMajorMinor(extensionVersion);
 
@@ -127,8 +131,10 @@ function App() {
     transport.send({ type: 'setLastSeenVersion', version: currentMajorMinor });
   }, [currentMajorMinor]);
 
-  // Sync alwaysShowOverlay from persisted settings
+  // Sync alwaysShowOverlay from persisted settings (kiosk keeps labels on
+  // regardless of what the setting says).
   useEffect(() => {
+    if (isKioskMode) return;
     setAlwaysShowOverlay(alwaysShowLabels);
   }, [alwaysShowLabels]);
 
