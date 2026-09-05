@@ -4,12 +4,14 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import App from './App.tsx';
+import { useBrowserAssets } from './demoMode';
 import { isBrowserRuntime } from './runtime';
 
 async function main() {
-  // browserMock is for Vite dev mode only (UI prototyping without a server).
+  // browserMock is for Vite dev mode and for static demo builds (VITE_DEMO=1),
+  // i.e. UI prototyping without a server.
   // In standalone server mode, assets are loaded server-side and sent over WebSocket.
-  if (isBrowserRuntime && import.meta.env.DEV) {
+  if (isBrowserRuntime && useBrowserAssets) {
     const { initBrowserMock } = await import('./browserMock.js');
     await initBrowserMock();
   }

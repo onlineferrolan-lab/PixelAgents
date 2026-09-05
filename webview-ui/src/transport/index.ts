@@ -1,5 +1,7 @@
 import type { ServerMessage } from '../../../core/src/messages.js';
+import { isDemoMode } from '../demoMode.js';
 import { isBrowserRuntime } from '../runtime.js';
+import { DemoTransport } from './demoTransport.js';
 import { PostMessageTransport } from './postMessageTransport.js';
 import type { MessageTransport } from './types.js';
 import { WebSocketTransport } from './webSocketTransport.js';
@@ -7,6 +9,11 @@ import { WebSocketTransport } from './webSocketTransport.js';
 function createTransport(): MessageTransport {
   if (!isBrowserRuntime) {
     return new PostMessageTransport();
+  }
+  // Static demo build (VITE_DEMO=1): no server exists, so skip the WebSocket
+  // entirely and relay browserMock/demoMode's injected messages in memory.
+  if (isDemoMode) {
+    return new DemoTransport();
   }
   // Standalone browser: connect via WebSocket to the same host serving the SPA.
   // The server token rides the handshake query when this page was opened from

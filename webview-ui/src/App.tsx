@@ -13,6 +13,7 @@ import { Tooltip } from './components/Tooltip.js';
 import { Modal } from './components/ui/Modal.js';
 import { VersionIndicator } from './components/VersionIndicator.js';
 import { ZoomControls } from './components/ZoomControls.js';
+import { dispatchDemoAgents, useBrowserAssets } from './demoMode.js';
 import { useEditorActions } from './hooks/useEditorActions.js';
 import { useEditorKeyboard } from './hooks/useEditorKeyboard.js';
 import { useExtensionMessages } from './hooks/useExtensionMessages.js';
@@ -51,11 +52,15 @@ function App() {
   // Browser runtime (dev or static dist): dispatch mock messages after the
   // useExtensionMessages listener has been registered.
   useEffect(() => {
-    // browserMock is for Vite dev mode only (UI prototyping without a server).
+    // browserMock is for Vite dev mode and static demo builds (VITE_DEMO=1),
+    // i.e. UI prototyping without a server.
     // In standalone server mode, the server sends all state over WebSocket.
     // In VS Code mode, the extension sends all state via postMessage.
-    if (isBrowserRuntime && import.meta.env.DEV) {
-      void import('./browserMock.js').then(({ dispatchMockMessages }) => dispatchMockMessages());
+    if (isBrowserRuntime && useBrowserAssets) {
+      void import('./browserMock.js').then(({ dispatchMockMessages }) => {
+        dispatchMockMessages();
+        dispatchDemoAgents();
+      });
     }
   }, []);
 
