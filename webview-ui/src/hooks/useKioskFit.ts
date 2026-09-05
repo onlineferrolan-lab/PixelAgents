@@ -36,6 +36,7 @@ export function useKioskFit(
   containerRef: React.RefObject<HTMLDivElement | null>,
   officeState: OfficeState,
   layoutReady: boolean,
+  layoutSeq: number,
   onZoomChange: (zoom: number) => void,
   panRef: React.MutableRefObject<{ x: number; y: number }>,
 ): void {
@@ -86,7 +87,12 @@ export function useKioskFit(
     const observer = new ResizeObserver(fit);
     observer.observe(container);
     return () => observer.disconnect();
-  }, [containerRef, officeState, layoutReady, onZoomChange, panRef]);
+    // layoutSeq is in the deps on purpose: OfficeState is mutated in place,
+    // so editing the office (adding a room, moving seats) changes the content
+    // box without changing any identity React could notice. Without it the
+    // wall display would keep the old framing until someone resized or
+    // reloaded it.
+  }, [containerRef, officeState, layoutReady, layoutSeq, onZoomChange, panRef]);
 }
 
 interface Bounds {

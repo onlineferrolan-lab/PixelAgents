@@ -81,6 +81,7 @@ function App() {
     subagentTools,
     subagentCharacters,
     layoutReady,
+    layoutSeq,
     layoutWasReset,
     loadedAssets,
     workspaceFolders,
@@ -256,7 +257,14 @@ function App() {
   const officeState = getOfficeState();
 
   // Wall display: keep the whole office framed to the screen.
-  useKioskFit(containerRef, officeState, layoutReady, editor.handleZoomChange, editor.panRef);
+  useKioskFit(
+    containerRef,
+    officeState,
+    layoutReady,
+    layoutSeq,
+    editor.handleZoomChange,
+    editor.panRef,
+  );
 
   // Merged set of folders the Areas dropdown can map: real workspace folders plus
   // every distinct folder an agent has run in this session (deduped by name; name

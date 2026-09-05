@@ -76,6 +76,10 @@ interface ExtensionMessageState {
   subagentTools: Record<number, Record<string, ToolActivity[]>>;
   subagentCharacters: SubagentCharacter[];
   layoutReady: boolean;
+  /** Bumped every time a layout is applied. Lets consumers react to the
+   *  office being re-shaped (rooms added, seats moved), which mutating
+   *  OfficeState in place cannot signal on its own. */
+  layoutSeq: number;
   layoutWasReset: boolean;
   loadedAssets?: { catalog: FurnitureAsset[]; sprites: Record<string, string[][]> };
   workspaceFolders: WorkspaceFolder[];
@@ -130,6 +134,7 @@ export function useExtensionMessages(
   >({});
   const [subagentCharacters, setSubagentCharacters] = useState<SubagentCharacter[]>([]);
   const [layoutReady, setLayoutReady] = useState(false);
+  const [layoutSeq, setLayoutSeq] = useState(0);
   const [layoutWasReset, setLayoutWasReset] = useState(false);
   const [loadedAssets, setLoadedAssets] = useState<
     { catalog: FurnitureAsset[]; sprites: Record<string, string[][]> } | undefined
@@ -238,6 +243,7 @@ export function useExtensionMessages(
         pendingAgents = [];
         layoutReadyRef.current = true;
         setLayoutReady(true);
+        setLayoutSeq((n) => n + 1);
         if (msg.wasReset) {
           setLayoutWasReset(true);
         }
@@ -766,6 +772,7 @@ export function useExtensionMessages(
     subagentTools,
     subagentCharacters,
     layoutReady,
+    layoutSeq,
     layoutWasReset,
     loadedAssets,
     workspaceFolders,
